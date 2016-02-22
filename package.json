@@ -1,0 +1,19 @@
+{
+  "name": "shooting_pj",
+  "version": "1.0.0",
+  "description": "shooting",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "shooting"
+  ],
+  "author": "narizawa",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-coffee": "^2.3.1",
+    "gulp-plumber": "^1.1.0"
+  }
+}
