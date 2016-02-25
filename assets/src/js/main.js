@@ -29,7 +29,7 @@
     DOWN: false
   };
 
-  mainLoop = function(x, y) {
+  mainLoop = function() {
     var deltaTime, interval, startTime;
     startTime = new Date();
     player.move();
@@ -39,7 +39,7 @@
     if (interval > 0) {
       return setTimeout(mainLoop, interval);
     } else {
-      return mainLoop(player);
+      return mainLoop();
     }
   };
 
@@ -57,7 +57,7 @@
     playerY = (screenCanvas.height - playerImage.height) - 20;
     player = new Player(playerX, playerY);
     player.reDraw();
-    return mainLoop(player.x, player.y);
+    return mainLoop();
   };
 
   window.onkeydown = function(key) {
@@ -69,9 +69,9 @@
   };
 
   Player = (function() {
-    function Player(x1, y1) {
-      this.x = x1;
-      this.y = y1;
+    function Player(x, y) {
+      this.x = x;
+      this.y = y;
       this.move = bind(this.move, this);
       this.speed = 4;
     }

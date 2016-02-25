@@ -19,7 +19,7 @@ KEY =
 
 # - main ---------------------------------------------------------------------
 
-mainLoop = (x, y) ->
+mainLoop = ->
   startTime = new Date()
 
   player.move()
@@ -31,7 +31,7 @@ mainLoop = (x, y) ->
   if interval > 0
     setTimeout mainLoop, interval
   else
-    mainLoop player
+    mainLoop()
 
 window.onload = ->
   SCREEN_WIDTH = 800
@@ -54,7 +54,7 @@ window.onload = ->
   player = new Player playerX, playerY
   player.reDraw()
   
-  mainLoop player.x, player.y
+  mainLoop()
 
 window.onkeydown = (key) ->
   KEY[key.keyCode] = true
