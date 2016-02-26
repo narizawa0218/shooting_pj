@@ -102,7 +102,7 @@
 
     Player.prototype.shot = function() {
       if (KEY[SPACE]) {
-        this.bullet.set();
+        this.bullet.initializePosition();
       }
       this.bullet.move();
       if (this.bullet.hp > 0) {
@@ -135,7 +135,7 @@
       }
     };
 
-    Bullet.prototype.set = function() {
+    Bullet.prototype.initializePosition = function() {
       if (this.hp === 0) {
         this.x = player.x;
         this.y = player.y;

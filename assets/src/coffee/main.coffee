@@ -84,7 +84,7 @@ class Player
     @y += @speed if KEY[DOWN] && @y + playerImage.height < screenCanvas.height
 
   shot: ->
-    @bullet.set() if KEY[SPACE]
+    @bullet.initializePosition() if KEY[SPACE]
     @bullet.move()
     @bullet.draw() if @bullet.hp > 0
 
@@ -105,7 +105,7 @@ class Bullet
     @y -= @speed 
     @hp = 0 if @y < bulletImage.height
 
-  set: ->
+  initializePosition: ->
     if @hp == 0
       @x = player.x
       @y = player.y
