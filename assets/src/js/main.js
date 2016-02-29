@@ -116,7 +116,7 @@
             break;
           }
         }
-        if (!this.bullets[i].isDraw()) {
+        if (!this.bullets[i].isDraw) {
           continue;
         }
         this.bullets[i].move();
@@ -142,9 +142,8 @@
       var i, j, ref, results;
       results = [];
       for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
-        this.bullets[i].x = 0;
-        this.bullets[i].y = 0;
-        results.push(this.bullets[i].hp = 0);
+        this.bullets[i].setPosition(0, 0);
+        results.push(this.bullets[i].disabled());
       }
       return results;
     };
@@ -158,35 +157,43 @@
       this.x = x1;
       this.y = y1;
       this.speed = 6;
-      this.hp = 0;
       this.fireInterval = 0;
+      this.isDraw = false;
     }
 
     Bullet.prototype.move = function() {
       this.y -= this.speed;
       if (this.y < bulletImage.height) {
-        return this.hp = 0;
+        return this.isDraw = false;
       }
     };
 
     Bullet.prototype.initializePosition = function(x, y) {
-      if (this.isDraw()) {
+      if (this.isDraw) {
         return true;
       }
-      this.x = x;
-      this.y = y;
-      this.hp = 1;
+      this.setPosition(x, y);
+      this.enabled();
       return false;
     };
 
     Bullet.prototype.draw = function() {
-      if (this.isDraw()) {
+      if (this.isDraw) {
         return ctx.drawImage(bulletImage, this.x, this.y);
       }
     };
 
-    Bullet.prototype.isDraw = function() {
-      return this.hp > 0;
+    Bullet.prototype.setPosition = function(x, y) {
+      this.x = x;
+      return this.y = y;
+    };
+
+    Bullet.prototype.enabled = function() {
+      return this.isDraw = true;
+    };
+
+    Bullet.prototype.disabled = function() {
+      return this.isDraw = false;
     };
 
     return Bullet;

@@ -96,7 +96,7 @@ class Player
         unless @bullets[i].initializePosition @x, @y
           @fireInterval = 20
           break
-      continue unless @bullets[i].isDraw()
+      continue unless @bullets[i].isDraw
       @bullets[i].move()
       @bullets[i].draw()
     @fireInterval-- if @fireInterval > 0
@@ -112,29 +112,34 @@ class Player
 
   resetBullet: ->
     for i in [0..@magazine_size]
-      @bullets[i].x = 0
-      @bullets[i].y = 0
-      @bullets[i].hp = 0
+      @bullets[i].setPosition(0, 0)
+      @bullets[i].disabled()
 
 class Bullet
   constructor: (@x, @y) ->
     @speed = 6
-    @hp = 0
     @fireInterval = 0
+    @isDraw = false
 
   move: ->
     @y -= @speed 
-    @hp = 0 if @y < bulletImage.height
+    @isDraw = false if @y < bulletImage.height
 
   initializePosition: (x, y) ->
-    return true if @isDraw()
-    @x = x
-    @y = y
-    @hp = 1
+    return true if @isDraw
+    @setPosition(x, y)
+    @enabled()
     false
 
   draw: ->
-    ctx.drawImage bulletImage, @x, @y if @isDraw()
+    ctx.drawImage bulletImage, @x, @y if @isDraw
 
-  isDraw: ->
-    @hp > 0
+  setPosition: (x, y) ->
+    @x = x
+    @y = y
+
+  enabled: ->
+    @isDraw = true
+
+  disabled: ->
+    @isDraw = false
