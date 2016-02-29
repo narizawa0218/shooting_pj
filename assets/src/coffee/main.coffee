@@ -81,6 +81,7 @@ class Player
     @bullets = new Array @magazine_size
     for i in [0..@magazine_size]
       @bullets[i] = new Bullet @x, @y
+    @fireInterval = 0
 
   move: =>
     @x += @speed if KEY[RIGHT] && @x + playerImage.width < screenCanvas.width
@@ -90,8 +91,11 @@ class Player
 
   shot: ->
     for i in [0..@magazine_size]
-      if KEY[SPACE]
-        break unless @bullets[i].initializePosition @x, @y
+      if KEY[SPACE] && @fireInterval == 0
+        unless @bullets[i].initializePosition @x, @y
+          @fireInterval = 20
+          break
+    @fireInterval-- if @fireInterval > 0
     for i in [0..@magazine_size]
       continue unless @bullets[i].isDraw()
       @bullets[i].move()
@@ -117,6 +121,7 @@ class Bullet
   constructor: (@x, @y) ->
     @speed = 6
     @hp = 0
+    @fireInterval = 0
 
   move: ->
     @y -= @speed 

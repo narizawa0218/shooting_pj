@@ -89,6 +89,7 @@
       for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
         this.bullets[i] = new Bullet(this.x, this.y);
       }
+      this.fireInterval = 0;
     }
 
     Player.prototype.move = function() {
@@ -109,11 +110,15 @@
     Player.prototype.shot = function() {
       var i, j, k, l, ref, ref1, ref2, results;
       for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
-        if (KEY[SPACE]) {
+        if (KEY[SPACE] && this.fireInterval === 0) {
           if (!this.bullets[i].initializePosition(this.x, this.y)) {
+            this.fireInterval = 20;
             break;
           }
         }
+      }
+      if (this.fireInterval > 0) {
+        this.fireInterval--;
       }
       for (i = k = 0, ref1 = this.magazine_size; 0 <= ref1 ? k <= ref1 : k >= ref1; i = 0 <= ref1 ? ++k : --k) {
         if (!this.bullets[i].isDraw()) {
@@ -160,6 +165,7 @@
       this.y = y1;
       this.speed = 6;
       this.hp = 0;
+      this.fireInterval = 0;
     }
 
     Bullet.prototype.move = function() {
