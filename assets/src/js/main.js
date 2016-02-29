@@ -78,32 +78,31 @@
   };
 
   Player = (function() {
+    var _down, _initializeBullets, _left, _right, _up;
+
     function Player(x1, y1) {
-      var i, j, ref;
       this.x = x1;
       this.y = y1;
       this.move = bind(this.move, this);
       this.speed = 4;
       this.magazine_size = 5;
       this.bullets = new Array(this.magazine_size);
-      for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
-        this.bullets[i] = new Bullet(this.x, this.y);
-      }
       this.fireInterval = 0;
+      _initializeBullets.call(this);
     }
 
     Player.prototype.move = function() {
       if (KEY[RIGHT] && this.x + playerImage.width < screenCanvas.width) {
-        this.x += this.speed;
+        _right.call(this);
       }
       if (KEY[LEFT] && this.x > 0) {
-        this.x -= this.speed;
+        _left.call(this);
       }
       if (KEY[UP] && this.y > 0) {
-        this.y -= this.speed;
+        _up.call(this);
       }
       if (KEY[DOWN] && this.y + playerImage.height < screenCanvas.height) {
-        return this.y += this.speed;
+        return _down.call(this);
       }
     };
 
@@ -144,6 +143,31 @@
       for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
         this.bullets[i].setPosition(0, 0);
         results.push(this.bullets[i].disabled());
+      }
+      return results;
+    };
+
+    _up = function() {
+      return this.y -= this.speed;
+    };
+
+    _down = function() {
+      return this.y += this.speed;
+    };
+
+    _right = function() {
+      return this.x += this.speed;
+    };
+
+    _left = function() {
+      return this.x -= this.speed;
+    };
+
+    _initializeBullets = function() {
+      var i, j, ref, results;
+      results = [];
+      for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+        results.push(this.bullets[i] = new Bullet(this.x, this.y));
       }
       return results;
     };

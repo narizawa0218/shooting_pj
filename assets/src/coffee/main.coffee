@@ -79,15 +79,14 @@ class Player
     @speed = 4
     @magazine_size = 5
     @bullets = new Array @magazine_size
-    for i in [0..@magazine_size]
-      @bullets[i] = new Bullet @x, @y
     @fireInterval = 0
+    _initializeBullets.call @
 
   move: =>
-    @x += @speed if KEY[RIGHT] && @x + playerImage.width < screenCanvas.width
-    @x -= @speed if KEY[LEFT] && @x > 0
-    @y -= @speed if KEY[UP] && @y > 0
-    @y += @speed if KEY[DOWN] && @y + playerImage.height < screenCanvas.height
+    _right.call @ if KEY[RIGHT] && @x + playerImage.width < screenCanvas.width
+    _left.call @ if KEY[LEFT] && @x > 0
+    _up.call @ if KEY[UP] && @y > 0
+    _down.call @ if KEY[DOWN] && @y + playerImage.height < screenCanvas.height
 
   # 各弾に対して処理する
   shot: ->
@@ -114,6 +113,22 @@ class Player
     for i in [0..@magazine_size]
       @bullets[i].setPosition(0, 0)
       @bullets[i].disabled()
+
+  _up = ->
+    @y -= @speed
+
+  _down = ->
+    @y += @speed
+
+  _right = ->
+    @x += @speed
+
+  _left = ->
+    @x -= @speed
+
+  _initializeBullets = ->
+    for i in [0..@magazine_size]
+      @bullets[i] = new Bullet @x, @y
 
 class Bullet
   constructor: (@x, @y) ->
