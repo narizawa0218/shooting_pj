@@ -92,7 +92,7 @@ class Player
   shot: ->
     for i in [0..@magazine_size]
       if KEY[SPACE] && @fireInterval == 0
-        unless @bullets[i].initializePosition @x, @y
+        unless @bullets[i].initializePosition (@x + playerImage.width / 4), (@y - bulletImage.height)
           _setFireInterval.call @, 20
           break
       continue unless @bullets[i].isDraw

@@ -110,7 +110,7 @@
       var i, j, ref;
       for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
         if (KEY[SPACE] && this.fireInterval === 0) {
-          if (!this.bullets[i].initializePosition(this.x, this.y)) {
+          if (!this.bullets[i].initializePosition(this.x + playerImage.width / 4, this.y - bulletImage.height)) {
             _setFireInterval.call(this, 20);
             break;
           }
