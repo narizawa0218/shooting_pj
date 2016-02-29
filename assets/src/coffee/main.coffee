@@ -64,6 +64,8 @@ window.onload = ->
   bulletImage = new Image()
   bulletImage.src = "assets/img/bullet.png"
 
+  player.resetBullet()
+
   mainLoop()
 
 window.onkeydown = (key) ->
@@ -75,7 +77,10 @@ window.onkeyup = (key) ->
 class Player
   constructor: (@x, @y) ->
     @speed = 4
-    @bullet = new Bullet @x, @y
+    @magazine_size = 5
+    @bullets = new Array @magazine_size
+    for i in [0..@magazine_size]
+      @bullets[i] = new Bullet @x, @y
 
   move: =>
     @x += @speed if KEY[RIGHT] && @x + playerImage.width < screenCanvas.width
@@ -84,9 +89,14 @@ class Player
     @y += @speed if KEY[DOWN] && @y + playerImage.height < screenCanvas.height
 
   shot: ->
-    @bullet.initializePosition() if KEY[SPACE]
-    @bullet.move()
-    @bullet.draw() if @bullet.hp > 0
+    for i in [0..@magazine_size]
+      if KEY[SPACE]
+        break unless @bullets[i].initializePosition @x, @y
+    for i in [0..@magazine_size]
+      continue if @bullets[i].hp <= 0
+      @bullets[i].move()
+    for i in [0..@magazine_size]
+      @bullets[i].draw() if @bullets[i].hp > 0
 
   reDraw: ->
     # キャンバスのクリア
@@ -94,7 +104,15 @@ class Player
     # 描画
     ctx.drawImage playerImage, @x, @y
 
-    @bullet.draw()
+    # @bullet.draw()
+    for i in [0..@magazine_size]
+      @bullets[i].draw()
+
+  resetBullet: ->
+    for i in [0..@magazine_size]
+      @bullets[i].x = 0
+      @bullets[i].y = 0
+      @bullets[i].hp = 0
 
 class Bullet
   constructor: (@x, @y) ->
@@ -105,11 +123,14 @@ class Bullet
     @y -= @speed 
     @hp = 0 if @y < bulletImage.height
 
-  initializePosition: ->
+  initializePosition: (x, y) ->
     if @hp == 0
-      @x = player.x
-      @y = player.y
+      @x = x
+      @y = y
       @hp = 1
+      return false
+    else
+      return true
 
   draw: ->
     ctx.drawImage bulletImage, @x, @y if @hp > 0

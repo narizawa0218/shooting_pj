@@ -65,6 +65,7 @@
     player.reDraw();
     bulletImage = new Image();
     bulletImage.src = "assets/img/bullet.png";
+    player.resetBullet();
     return mainLoop();
   };
 
@@ -77,12 +78,17 @@
   };
 
   Player = (function() {
-    function Player(x, y) {
-      this.x = x;
-      this.y = y;
+    function Player(x1, y1) {
+      var i, j, ref;
+      this.x = x1;
+      this.y = y1;
       this.move = bind(this.move, this);
       this.speed = 4;
-      this.bullet = new Bullet(this.x, this.y);
+      this.magazine_size = 5;
+      this.bullets = new Array(this.magazine_size);
+      for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+        this.bullets[i] = new Bullet(this.x, this.y);
+      }
     }
 
     Player.prototype.move = function() {
@@ -101,19 +107,51 @@
     };
 
     Player.prototype.shot = function() {
-      if (KEY[SPACE]) {
-        this.bullet.initializePosition();
+      var i, j, k, l, ref, ref1, ref2, results;
+      for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+        if (KEY[SPACE]) {
+          if (!this.bullets[i].initializePosition(this.x, this.y)) {
+            break;
+          }
+        }
       }
-      this.bullet.move();
-      if (this.bullet.hp > 0) {
-        return this.bullet.draw();
+      for (i = k = 0, ref1 = this.magazine_size; 0 <= ref1 ? k <= ref1 : k >= ref1; i = 0 <= ref1 ? ++k : --k) {
+        if (this.bullets[i].hp <= 0) {
+          continue;
+        }
+        this.bullets[i].move();
       }
+      results = [];
+      for (i = l = 0, ref2 = this.magazine_size; 0 <= ref2 ? l <= ref2 : l >= ref2; i = 0 <= ref2 ? ++l : --l) {
+        if (this.bullets[i].hp > 0) {
+          results.push(this.bullets[i].draw());
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
     };
 
     Player.prototype.reDraw = function() {
+      var i, j, ref, results;
       ctx.clearRect(0, 0, screenCanvas.width, screenCanvas.height);
       ctx.drawImage(playerImage, this.x, this.y);
-      return this.bullet.draw();
+      results = [];
+      for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+        results.push(this.bullets[i].draw());
+      }
+      return results;
+    };
+
+    Player.prototype.resetBullet = function() {
+      var i, j, ref, results;
+      results = [];
+      for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+        this.bullets[i].x = 0;
+        this.bullets[i].y = 0;
+        results.push(this.bullets[i].hp = 0);
+      }
+      return results;
     };
 
     return Player;
@@ -121,9 +159,9 @@
   })();
 
   Bullet = (function() {
-    function Bullet(x, y) {
-      this.x = x;
-      this.y = y;
+    function Bullet(x1, y1) {
+      this.x = x1;
+      this.y = y1;
       this.speed = 6;
       this.hp = 0;
     }
@@ -135,11 +173,14 @@
       }
     };
 
-    Bullet.prototype.initializePosition = function() {
+    Bullet.prototype.initializePosition = function(x, y) {
       if (this.hp === 0) {
-        this.x = player.x;
-        this.y = player.y;
-        return this.hp = 1;
+        this.x = x;
+        this.y = y;
+        this.hp = 1;
+        return false;
+      } else {
+        return true;
       }
     };
 
