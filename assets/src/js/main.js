@@ -78,7 +78,7 @@
   };
 
   Player = (function() {
-    var _down, _initializeBullets, _left, _right, _up;
+    var _coolDown, _down, _initializeBullets, _left, _right, _setFireInterval, _up;
 
     function Player(x1, y1) {
       this.x = x1;
@@ -87,7 +87,7 @@
       this.speed = 4;
       this.magazine_size = 5;
       this.bullets = new Array(this.magazine_size);
-      this.fireInterval = 0;
+      _setFireInterval.call(this, 0);
       _initializeBullets.call(this);
     }
 
@@ -111,7 +111,7 @@
       for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
         if (KEY[SPACE] && this.fireInterval === 0) {
           if (!this.bullets[i].initializePosition(this.x, this.y)) {
-            this.fireInterval = 20;
+            _setFireInterval.call(this, 20);
             break;
           }
         }
@@ -122,7 +122,7 @@
         this.bullets[i].draw();
       }
       if (this.fireInterval > 0) {
-        return this.fireInterval--;
+        return _coolDown.call(this);
       }
     };
 
@@ -172,11 +172,21 @@
       return results;
     };
 
+    _setFireInterval = function(interval) {
+      return this.fireInterval = interval;
+    };
+
+    _coolDown = function() {
+      return this.fireInterval--;
+    };
+
     return Player;
 
   })();
 
   Bullet = (function() {
+    var _up;
+
     function Bullet(x1, y1) {
       this.x = x1;
       this.y = y1;
@@ -186,7 +196,7 @@
     }
 
     Bullet.prototype.move = function() {
-      this.y -= this.speed;
+      _up.call(this);
       if (this.y < bulletImage.height) {
         return this.isDraw = false;
       }
@@ -218,6 +228,10 @@
 
     Bullet.prototype.disabled = function() {
       return this.isDraw = false;
+    };
+
+    _up = function() {
+      return this.y -= this.speed;
     };
 
     return Bullet;

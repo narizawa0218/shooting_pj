@@ -79,7 +79,7 @@ class Player
     @speed = 4
     @magazine_size = 5
     @bullets = new Array @magazine_size
-    @fireInterval = 0
+    _setFireInterval.call @, 0
     _initializeBullets.call @
 
   move: =>
@@ -93,12 +93,12 @@ class Player
     for i in [0..@magazine_size]
       if KEY[SPACE] && @fireInterval == 0
         unless @bullets[i].initializePosition @x, @y
-          @fireInterval = 20
+          _setFireInterval.call @, 20
           break
       continue unless @bullets[i].isDraw
       @bullets[i].move()
       @bullets[i].draw()
-    @fireInterval-- if @fireInterval > 0
+    _coolDown.call @ if @fireInterval > 0
 
   reDraw: ->
     # キャンバスのクリア
@@ -130,6 +130,12 @@ class Player
     for i in [0..@magazine_size]
       @bullets[i] = new Bullet @x, @y
 
+  _setFireInterval = (interval) ->
+    @fireInterval = interval
+
+  _coolDown = ->
+    @fireInterval--
+
 class Bullet
   constructor: (@x, @y) ->
     @speed = 6
@@ -137,12 +143,12 @@ class Bullet
     @isDraw = false
 
   move: ->
-    @y -= @speed 
+    _up.call @
     @isDraw = false if @y < bulletImage.height
 
   initializePosition: (x, y) ->
     return true if @isDraw
-    @setPosition(x, y)
+    @setPosition x, y
     @enabled()
     false
 
@@ -158,3 +164,6 @@ class Bullet
 
   disabled: ->
     @isDraw = false
+
+  _up = ->
+    @y -= @speed
