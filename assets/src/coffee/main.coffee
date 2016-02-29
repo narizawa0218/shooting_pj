@@ -89,18 +89,17 @@ class Player
     @y -= @speed if KEY[UP] && @y > 0
     @y += @speed if KEY[DOWN] && @y + playerImage.height < screenCanvas.height
 
+  # 各弾に対して処理する
   shot: ->
     for i in [0..@magazine_size]
       if KEY[SPACE] && @fireInterval == 0
         unless @bullets[i].initializePosition @x, @y
           @fireInterval = 20
           break
-    @fireInterval-- if @fireInterval > 0
-    for i in [0..@magazine_size]
       continue unless @bullets[i].isDraw()
       @bullets[i].move()
-    for i in [0..@magazine_size]
       @bullets[i].draw()
+    @fireInterval-- if @fireInterval > 0
 
   reDraw: ->
     # キャンバスのクリア
@@ -128,13 +127,11 @@ class Bullet
     @hp = 0 if @y < bulletImage.height
 
   initializePosition: (x, y) ->
-    if @hp == 0
-      @x = x
-      @y = y
-      @hp = 1
-      return false
-    else
-      return true
+    return true if @isDraw()
+    @x = x
+    @y = y
+    @hp = 1
+    false
 
   draw: ->
     ctx.drawImage bulletImage, @x, @y if @isDraw()
