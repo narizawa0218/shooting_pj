@@ -116,18 +116,14 @@
         }
       }
       for (i = k = 0, ref1 = this.magazine_size; 0 <= ref1 ? k <= ref1 : k >= ref1; i = 0 <= ref1 ? ++k : --k) {
-        if (this.bullets[i].hp <= 0) {
+        if (!this.bullets[i].isDraw()) {
           continue;
         }
         this.bullets[i].move();
       }
       results = [];
       for (i = l = 0, ref2 = this.magazine_size; 0 <= ref2 ? l <= ref2 : l >= ref2; i = 0 <= ref2 ? ++l : --l) {
-        if (this.bullets[i].hp > 0) {
-          results.push(this.bullets[i].draw());
-        } else {
-          results.push(void 0);
-        }
+        results.push(this.bullets[i].draw());
       }
       return results;
     };
@@ -185,9 +181,13 @@
     };
 
     Bullet.prototype.draw = function() {
-      if (this.hp > 0) {
+      if (this.isDraw()) {
         return ctx.drawImage(bulletImage, this.x, this.y);
       }
+    };
+
+    Bullet.prototype.isDraw = function() {
+      return this.hp > 0;
     };
 
     return Bullet;

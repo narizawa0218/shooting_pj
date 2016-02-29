@@ -93,10 +93,10 @@ class Player
       if KEY[SPACE]
         break unless @bullets[i].initializePosition @x, @y
     for i in [0..@magazine_size]
-      continue if @bullets[i].hp <= 0
+      continue unless @bullets[i].isDraw()
       @bullets[i].move()
     for i in [0..@magazine_size]
-      @bullets[i].draw() if @bullets[i].hp > 0
+      @bullets[i].draw()
 
   reDraw: ->
     # キャンバスのクリア
@@ -104,7 +104,6 @@ class Player
     # 描画
     ctx.drawImage playerImage, @x, @y
 
-    # @bullet.draw()
     for i in [0..@magazine_size]
       @bullets[i].draw()
 
@@ -133,4 +132,7 @@ class Bullet
       return true
 
   draw: ->
-    ctx.drawImage bulletImage, @x, @y if @hp > 0
+    ctx.drawImage bulletImage, @x, @y if @isDraw()
+
+  isDraw: ->
+    @hp > 0
