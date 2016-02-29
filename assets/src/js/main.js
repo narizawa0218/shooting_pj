@@ -69,12 +69,12 @@
     return mainLoop();
   };
 
-  window.onkeydown = function(key) {
-    return KEY[key.keyCode] = true;
+  window.onkeydown = function(e) {
+    return KEY[e.keyCode] = true;
   };
 
-  window.onkeyup = function(key) {
-    return KEY[key.keyCode] = false;
+  window.onkeyup = function(e) {
+    return KEY[e.keyCode] = false;
   };
 
   Player = (function() {

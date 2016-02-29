@@ -68,11 +68,11 @@ window.onload = ->
 
   mainLoop()
 
-window.onkeydown = (key) ->
-  KEY[key.keyCode] = true
+window.onkeydown = (e) ->
+  KEY[e.keyCode] = true
 
-window.onkeyup = (key) ->
-  KEY[key.keyCode] = false
+window.onkeyup = (e) ->
+  KEY[e.keyCode] = false
 
 class Player
   constructor: (@x, @y) ->
