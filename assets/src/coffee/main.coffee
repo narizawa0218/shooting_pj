@@ -23,6 +23,9 @@ KEY =
 # bullet
 bulletImage = this
 
+# enemy
+enemyImage = this
+
 # - main ---------------------------------------------------------------------
 
 mainLoop = ->

@@ -1,5 +1,5 @@
 (function() {
-  var Bullet, DOWN, FPS, KEY, LEFT, MSPF, Player, RIGHT, SPACE, UP, bulletImage, ctx, mainLoop, player, playerImage, screenCanvas,
+  var Bullet, DOWN, FPS, KEY, LEFT, MSPF, Player, RIGHT, SPACE, UP, bulletImage, ctx, enemyImage, mainLoop, player, playerImage, screenCanvas,
     bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   screenCanvas = this;
@@ -33,6 +33,8 @@
   };
 
   bulletImage = this;
+
+  enemyImage = this;
 
   mainLoop = function() {
     var deltaTime, interval, startTime;
