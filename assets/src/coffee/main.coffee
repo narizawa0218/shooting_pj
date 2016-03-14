@@ -1,7 +1,6 @@
 # - global -------------------------------------------------------------------
 screenCanvas = this
 ctx = this
-playerImage = this
 player = this
 FPS = 60
 MSPF = 1000 / FPS
@@ -20,12 +19,8 @@ KEY =
   UP: false
   DOWN: false
 
-# bullet
-bulletImage = this
-
 # enemy
 enemy = this
-enemyImage = this
 
 # - main ---------------------------------------------------------------------
 
@@ -58,25 +53,11 @@ window.onload = ->
 
   ctx = screenCanvas.getContext '2d'
 
-  playerImage = new Image()
-  playerImage.src = "assets/img/player.png"
-
-  # 初期位置調整
-  playerX = (screenCanvas.width - playerImage.width) / 2;
-  playerY = (screenCanvas.height - playerImage.height) - 20;
-
-  player = new Player playerX, playerY
+  player = new Player screenCanvas.width, screenCanvas.height
   player.reDraw()
-
-  bulletImage = new Image()
-  bulletImage.src = "assets/img/bullet.png"
-
   player.resetBullet()
 
-  enemyImage = new Image()
-  enemyImage.src = "assets/img/enemy.png"
-
-  enemy = new Enemy Math.random() * screenCanvas.width - enemyImage.width, Math.random() * screenCanvas.height - enemyImage.height
+  enemy = new Enemy screenCanvas.width, screenCanvas.height
   enemy.draw()
 
   mainLoop()
@@ -88,7 +69,11 @@ window.onkeyup = (e) ->
   KEY[e.keyCode] = false
 
 class Player
-  constructor: (@x, @y) ->
+  constructor: (canvas_width, canvas_height) ->
+    @img = new Image()
+    @img.src = "assets/img/player.png"
+    @x = (canvas_width - @img.width) / 2
+    @y = (canvas_height - @img.height) - 20;
     @speed = 4
     @magazine_size = 5
     @bullets = new Array @magazine_size
@@ -96,16 +81,16 @@ class Player
     _initializeBullets.call @
 
   move: =>
-    _right.call @ if KEY[RIGHT] && @x + playerImage.width < screenCanvas.width
+    _right.call @ if KEY[RIGHT] && @x + @img.width < screenCanvas.width
     _left.call @ if KEY[LEFT] && @x > 0
     _up.call @ if KEY[UP] && @y > 0
-    _down.call @ if KEY[DOWN] && @y + playerImage.height < screenCanvas.height
+    _down.call @ if KEY[DOWN] && @y + @img.height < screenCanvas.height
 
   # 各弾に対して処理する
   shot: ->
     for i in [0..@magazine_size]
       if KEY[SPACE] && @fireInterval == 0
-        unless @bullets[i].initializePosition (@x + playerImage.width / 4), (@y - bulletImage.height)
+        unless @bullets[i].initializePosition (@x + @img.width / 4), (@y - @bullets[i].img.height)
           _setFireInterval.call @, 20
           break
       continue unless @bullets[i].isDraw
@@ -117,7 +102,7 @@ class Player
     # キャンバスのクリア
     ctx.clearRect 0, 0, screenCanvas.width, screenCanvas.height
     # 描画
-    ctx.drawImage playerImage, @x, @y
+    ctx.drawImage @img, @x, @y
 
     for i in [0..@magazine_size]
       @bullets[i].draw()
@@ -151,13 +136,15 @@ class Player
 
 class Bullet
   constructor: (@x, @y) ->
+    @img = new Image()
+    @img.src = "assets/img/bullet.png"
     @speed = 6
     @fireInterval = 0
     @isDraw = false
 
   move: ->
     _up.call @
-    @isDraw = false if @y < bulletImage.height
+    @isDraw = false if @y < @img.height
 
   initializePosition: (x, y) ->
     return true if @isDraw
@@ -166,7 +153,7 @@ class Bullet
     false
 
   draw: ->
-    ctx.drawImage bulletImage, @x, @y if @isDraw
+    ctx.drawImage @img, @x, @y if @isDraw
 
   setPosition: (x, y) ->
     @x = x
@@ -182,20 +169,24 @@ class Bullet
     @y -= @speed
 
 class Enemy
-  constructor: (@x, @y) ->
+  constructor: (canvas_width, canvas_height) ->
+    @img = new Image()
+    @img.src = "assets/img/enemy.png"
+    @x = Math.random() * canvas_width - @img.width
+    @y = Math.random() * canvas_height - @img.height
     @speed = 4
 
   move: ->
     _down.call @
     if @y > screenCanvas.height
-      @y = -enemyImage.height
-      @x = Math.random() * (screenCanvas.width - enemyImage.width)
+      @y = -@img.height
+      @x = Math.random() * (screenCanvas.width - @img.width)
 
   initializePosition: ->
     @setPosition 0, 0
 
   draw: ->
-    ctx.drawImage enemyImage, @x, @y
+    ctx.drawImage @img, @x, @y
 
   setPosition: (x, y) ->
     @x = x

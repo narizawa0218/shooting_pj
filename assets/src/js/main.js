@@ -1,12 +1,10 @@
 (function() {
-  var Bullet, DOWN, Enemy, FPS, KEY, LEFT, MSPF, Player, RIGHT, SPACE, UP, bulletImage, ctx, enemy, enemyImage, mainLoop, player, playerImage, screenCanvas,
+  var Bullet, DOWN, Enemy, FPS, KEY, LEFT, MSPF, Player, RIGHT, SPACE, UP, ctx, enemy, mainLoop, player, screenCanvas,
     bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   screenCanvas = this;
 
   ctx = this;
-
-  playerImage = this;
 
   player = this;
 
@@ -32,11 +30,7 @@
     DOWN: false
   };
 
-  bulletImage = this;
-
   enemy = this;
-
-  enemyImage = this;
 
   mainLoop = function() {
     var deltaTime, interval, startTime;
@@ -57,25 +51,17 @@
   };
 
   window.onload = function() {
-    var SCREEN_HEIGHT, SCREEN_WIDTH, playerX, playerY;
+    var SCREEN_HEIGHT, SCREEN_WIDTH;
     SCREEN_WIDTH = 800;
     SCREEN_HEIGHT = 500;
     screenCanvas = $("canvas#screen")[0];
     screenCanvas.width = SCREEN_WIDTH;
     screenCanvas.height = SCREEN_HEIGHT;
     ctx = screenCanvas.getContext('2d');
-    playerImage = new Image();
-    playerImage.src = "assets/img/player.png";
-    playerX = (screenCanvas.width - playerImage.width) / 2;
-    playerY = (screenCanvas.height - playerImage.height) - 20;
-    player = new Player(playerX, playerY);
+    player = new Player(screenCanvas.width, screenCanvas.height);
     player.reDraw();
-    bulletImage = new Image();
-    bulletImage.src = "assets/img/bullet.png";
     player.resetBullet();
-    enemyImage = new Image();
-    enemyImage.src = "assets/img/enemy.png";
-    enemy = new Enemy(Math.random() * screenCanvas.width - enemyImage.width, Math.random() * screenCanvas.height - enemyImage.height);
+    enemy = new Enemy(screenCanvas.width, screenCanvas.height);
     enemy.draw();
     return mainLoop();
   };
@@ -91,10 +77,12 @@
   Player = (function() {
     var _coolDown, _down, _initializeBullets, _left, _right, _setFireInterval, _up;
 
-    function Player(x1, y1) {
-      this.x = x1;
-      this.y = y1;
+    function Player(canvas_width, canvas_height) {
       this.move = bind(this.move, this);
+      this.img = new Image();
+      this.img.src = "assets/img/player.png";
+      this.x = (canvas_width - this.img.width) / 2;
+      this.y = (canvas_height - this.img.height) - 20;
       this.speed = 4;
       this.magazine_size = 5;
       this.bullets = new Array(this.magazine_size);
@@ -103,7 +91,7 @@
     }
 
     Player.prototype.move = function() {
-      if (KEY[RIGHT] && this.x + playerImage.width < screenCanvas.width) {
+      if (KEY[RIGHT] && this.x + this.img.width < screenCanvas.width) {
         _right.call(this);
       }
       if (KEY[LEFT] && this.x > 0) {
@@ -112,7 +100,7 @@
       if (KEY[UP] && this.y > 0) {
         _up.call(this);
       }
-      if (KEY[DOWN] && this.y + playerImage.height < screenCanvas.height) {
+      if (KEY[DOWN] && this.y + this.img.height < screenCanvas.height) {
         return _down.call(this);
       }
     };
@@ -121,7 +109,7 @@
       var i, j, ref;
       for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
         if (KEY[SPACE] && this.fireInterval === 0) {
-          if (!this.bullets[i].initializePosition(this.x + playerImage.width / 4, this.y - bulletImage.height)) {
+          if (!this.bullets[i].initializePosition(this.x + this.img.width / 4, this.y - this.bullets[i].img.height)) {
             _setFireInterval.call(this, 20);
             break;
           }
@@ -140,7 +128,7 @@
     Player.prototype.reDraw = function() {
       var i, j, ref, results;
       ctx.clearRect(0, 0, screenCanvas.width, screenCanvas.height);
-      ctx.drawImage(playerImage, this.x, this.y);
+      ctx.drawImage(this.img, this.x, this.y);
       results = [];
       for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
         results.push(this.bullets[i].draw());
@@ -201,6 +189,8 @@
     function Bullet(x1, y1) {
       this.x = x1;
       this.y = y1;
+      this.img = new Image();
+      this.img.src = "assets/img/bullet.png";
       this.speed = 6;
       this.fireInterval = 0;
       this.isDraw = false;
@@ -208,7 +198,7 @@
 
     Bullet.prototype.move = function() {
       _up.call(this);
-      if (this.y < bulletImage.height) {
+      if (this.y < this.img.height) {
         return this.isDraw = false;
       }
     };
@@ -224,7 +214,7 @@
 
     Bullet.prototype.draw = function() {
       if (this.isDraw) {
-        return ctx.drawImage(bulletImage, this.x, this.y);
+        return ctx.drawImage(this.img, this.x, this.y);
       }
     };
 
@@ -252,17 +242,19 @@
   Enemy = (function() {
     var _down, _left;
 
-    function Enemy(x1, y1) {
-      this.x = x1;
-      this.y = y1;
+    function Enemy(canvas_width, canvas_height) {
+      this.img = new Image();
+      this.img.src = "assets/img/enemy.png";
+      this.x = Math.random() * canvas_width - this.img.width;
+      this.y = Math.random() * canvas_height - this.img.height;
       this.speed = 4;
     }
 
     Enemy.prototype.move = function() {
       _down.call(this);
       if (this.y > screenCanvas.height) {
-        this.y = -enemyImage.height;
-        return this.x = Math.random() * (screenCanvas.width - enemyImage.width);
+        this.y = -this.img.height;
+        return this.x = Math.random() * (screenCanvas.width - this.img.width);
       }
     };
 
@@ -271,7 +263,7 @@
     };
 
     Enemy.prototype.draw = function() {
-      return ctx.drawImage(enemyImage, this.x, this.y);
+      return ctx.drawImage(this.img, this.x, this.y);
     };
 
     Enemy.prototype.setPosition = function(x, y) {
