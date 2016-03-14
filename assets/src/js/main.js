@@ -1,5 +1,5 @@
 (function() {
-  var Bullet, DOWN, FPS, KEY, LEFT, MSPF, Player, RIGHT, SPACE, UP, bulletImage, ctx, enemyImage, mainLoop, player, playerImage, screenCanvas,
+  var Bullet, DOWN, Enemy, FPS, KEY, LEFT, MSPF, Player, RIGHT, SPACE, UP, bulletImage, ctx, enemy, enemyImage, mainLoop, player, playerImage, screenCanvas,
     bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   screenCanvas = this;
@@ -34,6 +34,8 @@
 
   bulletImage = this;
 
+  enemy = this;
+
   enemyImage = this;
 
   mainLoop = function() {
@@ -42,11 +44,14 @@
     player.move();
     player.shot();
     player.reDraw();
+    enemy.move();
+    enemy.draw();
     deltaTime = (new Date()) - startTime;
     interval = MSPF - deltaTime;
     if (interval > 0) {
       return setTimeout(mainLoop, interval);
     } else {
+      count++;
       return mainLoop();
     }
   };
@@ -68,6 +73,10 @@
     bulletImage = new Image();
     bulletImage.src = "assets/img/bullet.png";
     player.resetBullet();
+    enemyImage = new Image();
+    enemyImage.src = "assets/img/enemy.png";
+    enemy = new Enemy(Math.random() * screenCanvas.width - enemyImage.width, Math.random() * screenCanvas.height - enemyImage.height);
+    enemy.draw();
     return mainLoop();
   };
 
@@ -237,6 +246,48 @@
     };
 
     return Bullet;
+
+  })();
+
+  Enemy = (function() {
+    var _down, _left;
+
+    function Enemy(x1, y1) {
+      this.x = x1;
+      this.y = y1;
+      this.speed = 4;
+    }
+
+    Enemy.prototype.move = function() {
+      _down.call(this);
+      if (this.y > screenCanvas.height) {
+        this.y = -enemyImage.height;
+        return this.x = Math.random() * (screenCanvas.width - enemyImage.width);
+      }
+    };
+
+    Enemy.prototype.initializePosition = function() {
+      return this.setPosition(0, 0);
+    };
+
+    Enemy.prototype.draw = function() {
+      return ctx.drawImage(enemyImage, this.x, this.y);
+    };
+
+    Enemy.prototype.setPosition = function(x, y) {
+      this.x = x;
+      return this.y = y;
+    };
+
+    _down = function() {
+      return this.y += this.speed + 5;
+    };
+
+    _left = function() {
+      return this.x -= this.speed - 10;
+    };
+
+    return Enemy;
 
   })();
 

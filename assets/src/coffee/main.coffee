@@ -24,6 +24,7 @@ KEY =
 bulletImage = this
 
 # enemy
+enemy = this
 enemyImage = this
 
 # - main ---------------------------------------------------------------------
@@ -34,6 +35,8 @@ mainLoop = ->
   player.move()
   player.shot()
   player.reDraw()
+  enemy.move()
+  enemy.draw()
 
   deltaTime = (new Date()) - startTime
   interval = MSPF - deltaTime
@@ -41,6 +44,7 @@ mainLoop = ->
   if interval > 0
     setTimeout mainLoop, interval
   else
+    count++
     mainLoop()
 
 window.onload = ->
@@ -68,6 +72,12 @@ window.onload = ->
   bulletImage.src = "assets/img/bullet.png"
 
   player.resetBullet()
+
+  enemyImage = new Image()
+  enemyImage.src = "assets/img/enemy.png"
+
+  enemy = new Enemy Math.random() * screenCanvas.width - enemyImage.width, Math.random() * screenCanvas.height - enemyImage.height
+  enemy.draw()
 
   mainLoop()
 
@@ -170,3 +180,29 @@ class Bullet
 
   _up = ->
     @y -= @speed
+
+class Enemy
+  constructor: (@x, @y) ->
+    @speed = 4
+
+  move: ->
+    _down.call @
+    if @y > screenCanvas.height
+      @y = -enemyImage.height
+      @x = Math.random() * (screenCanvas.width - enemyImage.width)
+
+  initializePosition: ->
+    @setPosition 0, 0
+
+  draw: ->
+    ctx.drawImage enemyImage, @x, @y
+
+  setPosition: (x, y) ->
+    @x = x
+    @y = y
+
+  _down = ->
+    @y += @speed + 5
+
+  _left = ->
+    @x -= @speed - 10
