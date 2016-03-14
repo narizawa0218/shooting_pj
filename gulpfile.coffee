@@ -7,7 +7,7 @@ plumber = require "gulp-plumber"
 gulp.task "coffee", ->
   gulp.src "assets/src/coffee/*.coffee" #対象ファイル
     .pipe plumber() #エラー出ても落ちない様に
-    .pipe coffee() #coffeeをjsにコンパイル
+    .pipe coffee({bare: true}) #coffeeをjsにコンパイル
     .pipe gulp.dest "assets/src/js/" #出力先
 
 # CoffeeScriptファイルに変更があったら, jsを随時ビルド(結合圧縮まですると時間がかかるのでしない)

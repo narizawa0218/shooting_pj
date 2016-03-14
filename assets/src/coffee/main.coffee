@@ -26,7 +26,7 @@ enemy = this
 
 mainLoop = ->
   startTime = new Date()
-
+  
   player.move()
   player.shot()
   player.reDraw()
