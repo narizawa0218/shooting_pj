@@ -4,7 +4,7 @@ class Enemy
     @img.src = "assets/img/enemy.png"
     @x = Math.random() * canvas_width - @img.width
     @y = Math.random() * canvas_height - @img.height
-    @speed = 4
+    @speed = 5
 
   move: ->
     _down.call @

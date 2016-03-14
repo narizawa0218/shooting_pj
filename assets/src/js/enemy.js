@@ -8,7 +8,7 @@ Enemy = (function() {
     this.img.src = "assets/img/enemy.png";
     this.x = Math.random() * canvas_width - this.img.width;
     this.y = Math.random() * canvas_height - this.img.height;
-    this.speed = 4;
+    this.speed = 5;
   }
 
   Enemy.prototype.move = function() {

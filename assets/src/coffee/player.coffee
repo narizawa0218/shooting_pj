@@ -4,7 +4,7 @@ class Player
     @img.src = "assets/img/player.png"
     @x = (canvas_width - @img.width) / 2
     @y = (canvas_height - @img.height) - 20;
-    @speed = 4
+    @speed = 10
     @magazine_size = 5
     @bullets = new Array @magazine_size
     _setFireInterval.call @, 0

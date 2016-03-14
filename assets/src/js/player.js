@@ -10,7 +10,7 @@ Player = (function() {
     this.img.src = "assets/img/player.png";
     this.x = (canvas_width - this.img.width) / 2;
     this.y = (canvas_height - this.img.height) - 20;
-    this.speed = 4;
+    this.speed = 10;
     this.magazine_size = 5;
     this.bullets = new Array(this.magazine_size);
     _setFireInterval.call(this, 0);
