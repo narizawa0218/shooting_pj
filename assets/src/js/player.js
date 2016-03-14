@@ -1,8 +1,12 @@
 var Player,
-  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
 
-Player = (function() {
-  var _coolDown, _down, _initializeBullets, _left, _right, _setFireInterval, _up;
+Player = (function(superClass) {
+  var _coolDown, _initializeBullets, _setFireInterval;
+
+  extend(Player, superClass);
 
   function Player(canvas_width, canvas_height) {
     this.move = bind(this.move, this);
@@ -19,16 +23,16 @@ Player = (function() {
 
   Player.prototype.move = function() {
     if (KEY[RIGHT] && this.x + this.img.width < screenCanvas.width) {
-      _right.call(this);
+      this.right();
     }
     if (KEY[LEFT] && this.x > 0) {
-      _left.call(this);
+      this.left();
     }
     if (KEY[UP] && this.y > 0) {
-      _up.call(this);
+      this.up();
     }
     if (KEY[DOWN] && this.y + this.img.height < screenCanvas.height) {
-      return _down.call(this);
+      return this.down();
     }
   };
 
@@ -73,22 +77,6 @@ Player = (function() {
     return results;
   };
 
-  _up = function() {
-    return this.y -= this.speed;
-  };
-
-  _down = function() {
-    return this.y += this.speed;
-  };
-
-  _right = function() {
-    return this.x += this.speed;
-  };
-
-  _left = function() {
-    return this.x -= this.speed;
-  };
-
   _initializeBullets = function() {
     var i, j, ref, results;
     results = [];
@@ -108,4 +96,4 @@ Player = (function() {
 
   return Player;
 
-})();
+})(Actor);

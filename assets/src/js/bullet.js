@@ -1,11 +1,11 @@
-var Bullet;
+var Bullet,
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
 
-Bullet = (function() {
-  var _up;
+Bullet = (function(superClass) {
+  extend(Bullet, superClass);
 
-  function Bullet(x1, y1) {
-    this.x = x1;
-    this.y = y1;
+  function Bullet() {
     this.img = new Image();
     this.img.src = "assets/img/bullet.png";
     this.speed = 6;
@@ -14,7 +14,7 @@ Bullet = (function() {
   }
 
   Bullet.prototype.move = function() {
-    _up.call(this);
+    this.up();
     if (this.y < this.img.height) {
       return this.isDraw = false;
     }
@@ -35,11 +35,6 @@ Bullet = (function() {
     }
   };
 
-  Bullet.prototype.setPosition = function(x, y) {
-    this.x = x;
-    return this.y = y;
-  };
-
   Bullet.prototype.enabled = function() {
     return this.isDraw = true;
   };
@@ -48,10 +43,6 @@ Bullet = (function() {
     return this.isDraw = false;
   };
 
-  _up = function() {
-    return this.y -= this.speed;
-  };
-
   return Bullet;
 
-})();
+})(Actor);

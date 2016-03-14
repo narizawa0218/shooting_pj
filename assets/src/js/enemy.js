@@ -1,18 +1,20 @@
-var Enemy;
+var Enemy,
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
 
-Enemy = (function() {
-  var _down, _left;
+Enemy = (function(superClass) {
+  extend(Enemy, superClass);
 
   function Enemy(canvas_width, canvas_height) {
     this.img = new Image();
     this.img.src = "assets/img/enemy.png";
     this.x = Math.random() * canvas_width - this.img.width;
     this.y = Math.random() * canvas_height - this.img.height;
-    this.speed = 5;
+    this.speed = 10;
   }
 
   Enemy.prototype.move = function() {
-    _down.call(this);
+    this.down();
     if (this.y > screenCanvas.height) {
       this.y = -this.img.height;
       return this.x = Math.random() * (screenCanvas.width - this.img.width);
@@ -27,19 +29,6 @@ Enemy = (function() {
     return ctx.drawImage(this.img, this.x, this.y);
   };
 
-  Enemy.prototype.setPosition = function(x, y) {
-    this.x = x;
-    return this.y = y;
-  };
-
-  _down = function() {
-    return this.y += this.speed + 5;
-  };
-
-  _left = function() {
-    return this.x -= this.speed - 10;
-  };
-
   return Enemy;
 
-})();
+})(Actor);

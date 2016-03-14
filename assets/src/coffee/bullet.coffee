@@ -1,5 +1,5 @@
-class Bullet
-  constructor: (@x, @y) ->
+class Bullet extends Actor
+  constructor: ->
     @img = new Image()
     @img.src = "assets/img/bullet.png"
     @speed = 6
@@ -7,7 +7,7 @@ class Bullet
     @isDraw = false
 
   move: ->
-    _up.call @
+    @up()
     @isDraw = false if @y < @img.height
 
   initializePosition: (x, y) ->
@@ -19,15 +19,8 @@ class Bullet
   draw: ->
     ctx.drawImage @img, @x, @y if @isDraw
 
-  setPosition: (x, y) ->
-    @x = x
-    @y = y
-
   enabled: ->
     @isDraw = true
 
   disabled: ->
     @isDraw = false
-
-  _up = ->
-    @y -= @speed

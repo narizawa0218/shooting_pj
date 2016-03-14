@@ -1,4 +1,4 @@
-class Player
+class Player extends Actor
   constructor: (canvas_width, canvas_height) ->
     @img = new Image()
     @img.src = "assets/img/player.png"
@@ -11,10 +11,10 @@ class Player
     _initializeBullets.call @
 
   move: =>
-    _right.call @ if KEY[RIGHT] && @x + @img.width < screenCanvas.width
-    _left.call @ if KEY[LEFT] && @x > 0
-    _up.call @ if KEY[UP] && @y > 0
-    _down.call @ if KEY[DOWN] && @y + @img.height < screenCanvas.height
+    @right() if KEY[RIGHT] && @x + @img.width < screenCanvas.width
+    @left() if KEY[LEFT] && @x > 0
+    @up() if KEY[UP] && @y > 0
+    @down() if KEY[DOWN] && @y + @img.height < screenCanvas.height
 
   # 各弾に対して処理する
   shot: ->
@@ -41,18 +41,6 @@ class Player
     for i in [0..@magazine_size]
       @bullets[i].setPosition(0, 0)
       @bullets[i].disabled()
-
-  _up = ->
-    @y -= @speed
-
-  _down = ->
-    @y += @speed
-
-  _right = ->
-    @x += @speed
-
-  _left = ->
-    @x -= @speed
 
   _initializeBullets = ->
     for i in [0..@magazine_size]
