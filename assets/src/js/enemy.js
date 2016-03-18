@@ -12,9 +12,10 @@ Enemy = (function(superClass) {
 
   Enemy.prototype.move = function() {
     this.down();
-    if (this.isOutsideOfCanvasHeight()) {
-      return this.setPosition(Math.random() * this.canvasWidth - this.img.width, -this.img.height);
+    if (this.isInsideOfCanvasHeight()) {
+      return;
     }
+    return this.setPosition(Math.random() * this.canvasWidth - this.img.width, -this.img.height);
   };
 
   Enemy.prototype.initializePosition = function() {

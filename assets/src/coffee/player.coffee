@@ -1,4 +1,5 @@
 class Player extends Actor
+  MAGAZINE_SIZE = 5
   constructor: (canvasWidth, canvasHeight) ->
     super(
       "assets/img/player.png",
@@ -9,11 +10,8 @@ class Player extends Actor
       canvasHeight
     )
     @speed = 10
-    @magazine_size = 5
-    @bullets = new Array @magazine_size
+    @bullets = new Bullets MAGAZINE_SIZE, canvasWidth, canvasHeight
     @setPosition @xCanvasCenter(), @yCanvasCenter()
-    _setFireInterval.call @, 0
-    _initializeBullets.call @
 
   move: =>
     @right() if KEY[RIGHT] && @isInsideOfCanvasWidth()
@@ -23,16 +21,7 @@ class Player extends Actor
 
   # 各弾に対して処理する
   shot: ->
-    for bullet in @bullets
-      if KEY[SPACE] && @fireInterval == 0
-        unless bullet.isDraw
-          bullet.initializePosition (@x + @img.width / 4), (@y - bullet.img.height)
-          _setFireInterval.call @, 20
-          break
-      continue unless bullet.isDraw
-      bullet.move()
-      bullet.draw()
-    _coolDown.call @ if @fireInterval > 0
+    @bullets.shoot (@x + @img.width / 4), @y
 
   reDraw: ->
     # キャンバスのクリア
@@ -40,26 +29,10 @@ class Player extends Actor
     # 描画
     ctx.drawImage @img, @x, @y if @isAlive
 
-    for bullet in @bullets
-      bullet.draw()
-
-  resetBullet: ->
-    for bullet in @bullets
-      bullet.setPosition(0, 0)
-      bullet.disabled()
+    @bullets.draw()
 
   xCanvasCenter: ->
     (@canvasWidth - @img.width) / 2
 
   yCanvasCenter: ->
     (@canvasHeight - @img.height) - 20
-
-  _initializeBullets = ->
-    for i in [0..@magazine_size]
-      @bullets[i] = new Bullet @x, @y
-
-  _setFireInterval = (interval) ->
-    @fireInterval = interval
-
-  _coolDown = ->
-    @fireInterval--

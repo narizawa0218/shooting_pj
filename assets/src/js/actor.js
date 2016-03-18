@@ -49,6 +49,32 @@ Actor = (function() {
     return !this.isOutsideOfCanvasWidth();
   };
 
+  Actor.prototype.isDead = function() {
+    return this.isAlive = false;
+  };
+
+  Actor.prototype.isRevived = function() {
+    return this.isAlive = true;
+  };
+
+  Actor.prototype.xCenter = function() {
+    return this.x + this.img.width / 2;
+  };
+
+  Actor.prototype.yCenter = function() {
+    return this.y + this.img.height / 2;
+  };
+
+  Actor.prototype.radius = function() {
+    return (this.img.width + this.img.height) / 4;
+  };
+
+  Actor.prototype.hitTo = function(actor) {
+    var d;
+    d = Math.sqrt(Math.pow(this.xCenter() - actor.xCenter(), 2) + Math.pow(this.yCenter() - actor.yCenter(), 2));
+    return this.radius() + actor.radius() > d;
+  };
+
   return Actor;
 
 })();

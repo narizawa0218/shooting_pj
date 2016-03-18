@@ -8,22 +8,14 @@ class Bullet extends Actor
       canvasWidth,
       canvasHeight
     )
-    @fireInterval = 0
-    @isDraw = false
 
   move: ->
     @up()
-    @isDraw = false if @y < @img.height
+    @isDead() if @y < @img.height
 
   initializePosition: (x, y) ->
     @setPosition x, y
-    @enabled()
+    @isRevived()
 
   draw: ->
-    ctx.drawImage @img, @x, @y if @isDraw && @isAlive
-
-  enabled: ->
-    @isDraw = true
-
-  disabled: ->
-    @isDraw = false
+    ctx.drawImage @img, @x, @y if @isAlive

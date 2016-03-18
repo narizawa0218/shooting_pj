@@ -12,11 +12,11 @@ class Enemy extends Actor
 
   move: ->
     @down()
-    if @isOutsideOfCanvasHeight()
-      @setPosition(
-        Math.random() * @canvasWidth - @img.width,
-        -@img.height
-      )
+    return if @isInsideOfCanvasHeight()
+    @setPosition(
+      Math.random() * @canvasWidth - @img.width,
+      -@img.height
+    )
 
   initializePosition: ->
     @setPosition(

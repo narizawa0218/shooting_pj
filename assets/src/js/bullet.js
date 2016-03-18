@@ -7,34 +7,24 @@ Bullet = (function(superClass) {
 
   function Bullet(canvasWidth, canvasHeight) {
     Bullet.__super__.constructor.call(this, "assets/img/bullet.png", 0, 0, 6, canvasWidth, canvasHeight);
-    this.fireInterval = 0;
-    this.isDraw = false;
   }
 
   Bullet.prototype.move = function() {
     this.up();
     if (this.y < this.img.height) {
-      return this.isDraw = false;
+      return this.isDead();
     }
   };
 
   Bullet.prototype.initializePosition = function(x, y) {
     this.setPosition(x, y);
-    return this.enabled();
+    return this.isRevived();
   };
 
   Bullet.prototype.draw = function() {
-    if (this.isDraw && this.isAlive) {
+    if (this.isAlive) {
       return ctx.drawImage(this.img, this.x, this.y);
     }
-  };
-
-  Bullet.prototype.enabled = function() {
-    return this.isDraw = true;
-  };
-
-  Bullet.prototype.disabled = function() {
-    return this.isDraw = false;
   };
 
   return Bullet;
