@@ -1,20 +1,25 @@
 class Player extends Actor
-  constructor: (canvas_width, canvas_height) ->
-    @img = new Image()
-    @img.src = "assets/img/player.png"
-    @x = (canvas_width - @img.width) / 2
-    @y = (canvas_height - @img.height) - 20;
+  constructor: (canvasWidth, canvasHeight) ->
+    super(
+      "assets/img/player.png",
+      0,
+      0,
+      10,
+      canvasWidth,
+      canvasHeight
+    )
     @speed = 10
     @magazine_size = 5
     @bullets = new Array @magazine_size
+    @setPosition @xCenter(), @yCenter()
     _setFireInterval.call @, 0
     _initializeBullets.call @
 
   move: =>
-    @right() if KEY[RIGHT] && @x + @img.width < screenCanvas.width
+    @right() if KEY[RIGHT] && @isInsideOfCanvasWidth()
     @left() if KEY[LEFT] && @x > 0
     @up() if KEY[UP] && @y > 0
-    @down() if KEY[DOWN] && @y + @img.height < screenCanvas.height
+    @down() if KEY[DOWN] && @isInsideOfCanvasHeight()
 
   # 各弾に対して処理する
   shot: ->
@@ -30,7 +35,7 @@ class Player extends Actor
 
   reDraw: ->
     # キャンバスのクリア
-    ctx.clearRect 0, 0, screenCanvas.width, screenCanvas.height
+    ctx.clearRect 0, 0, @canvasWidth, @canvasHeight
     # 描画
     ctx.drawImage @img, @x, @y
 

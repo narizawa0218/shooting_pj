@@ -8,21 +8,19 @@ Player = (function(superClass) {
 
   extend(Player, superClass);
 
-  function Player(canvas_width, canvas_height) {
+  function Player(canvasWidth, canvasHeight) {
     this.move = bind(this.move, this);
-    this.img = new Image();
-    this.img.src = "assets/img/player.png";
-    this.x = (canvas_width - this.img.width) / 2;
-    this.y = (canvas_height - this.img.height) - 20;
+    Player.__super__.constructor.call(this, "assets/img/player.png", 0, 0, 10, canvasWidth, canvasHeight);
     this.speed = 10;
     this.magazine_size = 5;
     this.bullets = new Array(this.magazine_size);
+    this.setPosition(this.xCenter(), this.yCenter());
     _setFireInterval.call(this, 0);
     _initializeBullets.call(this);
   }
 
   Player.prototype.move = function() {
-    if (KEY[RIGHT] && this.x + this.img.width < screenCanvas.width) {
+    if (KEY[RIGHT] && this.isInsideOfCanvasWidth()) {
       this.right();
     }
     if (KEY[LEFT] && this.x > 0) {
@@ -31,7 +29,7 @@ Player = (function(superClass) {
     if (KEY[UP] && this.y > 0) {
       this.up();
     }
-    if (KEY[DOWN] && this.y + this.img.height < screenCanvas.height) {
+    if (KEY[DOWN] && this.isInsideOfCanvasHeight()) {
       return this.down();
     }
   };
@@ -58,7 +56,7 @@ Player = (function(superClass) {
 
   Player.prototype.reDraw = function() {
     var i, j, ref, results;
-    ctx.clearRect(0, 0, screenCanvas.width, screenCanvas.height);
+    ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     ctx.drawImage(this.img, this.x, this.y);
     results = [];
     for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {

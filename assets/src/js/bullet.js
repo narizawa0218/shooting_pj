@@ -5,10 +5,8 @@ var Bullet,
 Bullet = (function(superClass) {
   extend(Bullet, superClass);
 
-  function Bullet() {
-    this.img = new Image();
-    this.img.src = "assets/img/bullet.png";
-    this.speed = 6;
+  function Bullet(canvasWidth, canvasHeight) {
+    Bullet.__super__.constructor.call(this, "assets/img/bullet.png", 0, 0, 6, canvasWidth, canvasHeight);
     this.fireInterval = 0;
     this.isDraw = false;
   }
@@ -16,8 +14,9 @@ Bullet = (function(superClass) {
   Bullet.prototype.move = function() {
     this.up();
     if (this.y < this.img.height) {
-      return this.isDraw = false;
+      this.isDraw = false;
     }
+    return console.log(this.isDraw);
   };
 
   Bullet.prototype.initializePosition = function(x, y) {

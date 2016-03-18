@@ -1,19 +1,28 @@
 class Enemy extends Actor
-  constructor: (canvas_width, canvas_height) ->
-    @img = new Image()
-    @img.src = "assets/img/enemy.png"
-    @x = Math.random() * canvas_width - @img.width
-    @y = Math.random() * canvas_height - @img.height
-    @speed = 10
+  constructor: (canvasWidth, canvasHeight) ->
+    super(
+      "assets/img/enemy.png",
+      0,
+      0,
+      10,
+      canvasWidth,
+      canvasHeight
+    )
+    @initializePosition()
 
   move: ->
     @down()
-    if @y > screenCanvas.height
-      @y = -@img.height
-      @x = Math.random() * (screenCanvas.width - @img.width)
+    if @isOutsideOfCanvasHeight()
+      @setPosition(
+        Math.random() * @canvasWidth - @img.width,
+        -@img.height
+      )
 
   initializePosition: ->
-    @setPosition 0, 0
+    @setPosition(
+      Math.random() * @canvasWidth - @img.width,
+      Math.random() * @canvasHeight - @img.height
+    )
 
   draw: ->
     ctx.drawImage @img, @x, @y

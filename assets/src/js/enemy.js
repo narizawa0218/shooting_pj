@@ -5,24 +5,20 @@ var Enemy,
 Enemy = (function(superClass) {
   extend(Enemy, superClass);
 
-  function Enemy(canvas_width, canvas_height) {
-    this.img = new Image();
-    this.img.src = "assets/img/enemy.png";
-    this.x = Math.random() * canvas_width - this.img.width;
-    this.y = Math.random() * canvas_height - this.img.height;
-    this.speed = 10;
+  function Enemy(canvasWidth, canvasHeight) {
+    Enemy.__super__.constructor.call(this, "assets/img/enemy.png", 0, 0, 10, canvasWidth, canvasHeight);
+    this.initializePosition();
   }
 
   Enemy.prototype.move = function() {
     this.down();
-    if (this.y > screenCanvas.height) {
-      this.y = -this.img.height;
-      return this.x = Math.random() * (screenCanvas.width - this.img.width);
+    if (this.isOutsideOfCanvasHeight()) {
+      return this.setPosition(Math.random() * this.canvasWidth - this.img.width, -this.img.height);
     }
   };
 
   Enemy.prototype.initializePosition = function() {
-    return this.setPosition(0, 0);
+    return this.setPosition(Math.random() * this.canvasWidth - this.img.width, Math.random() * this.canvasHeight - this.img.height);
   };
 
   Enemy.prototype.draw = function() {
