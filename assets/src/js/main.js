@@ -56,10 +56,7 @@ window.onload = function() {
   screenCanvas.height = SCREEN_HEIGHT;
   ctx = screenCanvas.getContext('2d');
   player = new Player(screenCanvas.width, screenCanvas.height);
-  player.reDraw();
-  player.resetBullet();
   enemy = new Enemy(screenCanvas.width, screenCanvas.height);
-  enemy.draw();
   return mainLoop();
 };
 
