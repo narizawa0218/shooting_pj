@@ -40,7 +40,8 @@ Player = (function(superClass) {
     for (j = 0, len = ref.length; j < len; j++) {
       bullet = ref[j];
       if (KEY[SPACE] && this.fireInterval === 0) {
-        if (!bullet.initializePosition(this.x + this.img.width / 4, this.y - bullet.img.height)) {
+        if (!bullet.isDraw) {
+          bullet.initializePosition(this.x + this.img.width / 4, this.y - bullet.img.height);
           _setFireInterval.call(this, 20);
           break;
         }

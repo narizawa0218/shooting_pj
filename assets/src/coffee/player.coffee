@@ -25,7 +25,8 @@ class Player extends Actor
   shot: ->
     for bullet in @bullets
       if KEY[SPACE] && @fireInterval == 0
-        unless bullet.initializePosition (@x + @img.width / 4), (@y - bullet.img.height)
+        unless bullet.isDraw
+          bullet.initializePosition (@x + @img.width / 4), (@y - bullet.img.height)
           _setFireInterval.call @, 20
           break
       continue unless bullet.isDraw

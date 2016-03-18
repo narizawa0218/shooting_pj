@@ -19,12 +19,8 @@ Bullet = (function(superClass) {
   };
 
   Bullet.prototype.initializePosition = function(x, y) {
-    if (this.isDraw) {
-      return true;
-    }
     this.setPosition(x, y);
-    this.enabled();
-    return false;
+    return this.enabled();
   };
 
   Bullet.prototype.draw = function() {

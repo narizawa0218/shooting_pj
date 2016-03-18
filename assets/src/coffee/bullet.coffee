@@ -16,10 +16,8 @@ class Bullet extends Actor
     @isDraw = false if @y < @img.height
 
   initializePosition: (x, y) ->
-    return true if @isDraw
     @setPosition x, y
     @enabled()
-    false
 
   draw: ->
     ctx.drawImage @img, @x, @y if @isDraw
