@@ -20,7 +20,7 @@ KEY =
   DOWN: false
 
 # enemy
-enemy = this
+enemies = this
 
 # - main ---------------------------------------------------------------------
 
@@ -30,17 +30,19 @@ mainLoop = ->
   player.move()
   player.shot()
   player.reDraw()
-  enemy.move()
-  enemy.draw()
+  for enemy in enemies when enemy.isAlive
+    enemy.move()
+    enemy.draw()
 
-  if player.isAlive && enemy.isAlive
-    if hitTo player.x, player.y, player.img, enemy.x, enemy.y, enemy.img
-      player.isAlive = false
-      enemy.isAlive = false
-    for bullet in player.bullets when bullet.isAlive
-      if hitTo bullet.x, bullet.y, bullet.img, enemy.x, enemy.y, enemy.img
-        bullet.isAlive = false
+  if player.isAlive
+    for enemy in enemies when enemy.isAlive
+      if hitTo player.x, player.y, player.img, enemy.x, enemy.y, enemy.img
+        player.isAlive = false
         enemy.isAlive = false
+      for bullet in player.bullets when bullet.isDraw
+        if hitTo bullet.x, bullet.y, bullet.img, enemy.x, enemy.y, enemy.img
+          bullet.isDraw = false
+          enemy.isAlive = false
 
   deltaTime = (new Date()) - startTime
   interval = MSPF - deltaTime
@@ -78,7 +80,9 @@ window.onload = ->
   ctx = screenCanvas.getContext '2d'
 
   player = new Player screenCanvas.width, screenCanvas.height
-  enemy = new Enemy screenCanvas.width, screenCanvas.height
+  enemies = new Array 5
+  for i in [0..9]
+    enemies[i] = new Enemy screenCanvas.width, screenCanvas.height
 
   mainLoop()
 

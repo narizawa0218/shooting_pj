@@ -1,4 +1,4 @@
-var DOWN, FPS, KEY, LEFT, MSPF, RIGHT, SPACE, UP, ctx, enemy, hitTo, mainLoop, player, screenCanvas;
+var DOWN, FPS, KEY, LEFT, MSPF, RIGHT, SPACE, UP, ctx, enemies, hitTo, mainLoop, player, screenCanvas;
 
 screenCanvas = this;
 
@@ -28,28 +28,40 @@ KEY = {
   DOWN: false
 };
 
-enemy = this;
+enemies = this;
 
 mainLoop = function() {
-  var bullet, deltaTime, i, interval, len, ref, startTime;
+  var bullet, deltaTime, enemy, interval, j, k, l, len, len1, len2, ref, startTime;
   startTime = new Date();
   player.move();
   player.shot();
   player.reDraw();
-  enemy.move();
-  enemy.draw();
-  if (player.isAlive && enemy.isAlive) {
-    if (hitTo(player.x, player.y, player.img, enemy.x, enemy.y, enemy.img)) {
-      player.isAlive = false;
-      enemy.isAlive = false;
+  for (j = 0, len = enemies.length; j < len; j++) {
+    enemy = enemies[j];
+    if (!enemy.isAlive) {
+      continue;
     }
-    ref = player.bullets;
-    for (i = 0, len = ref.length; i < len; i++) {
-      bullet = ref[i];
-      if (bullet.isAlive) {
-        if (hitTo(bullet.x, bullet.y, bullet.img, enemy.x, enemy.y, enemy.img)) {
-          bullet.isAlive = false;
-          enemy.isAlive = false;
+    enemy.move();
+    enemy.draw();
+  }
+  if (player.isAlive) {
+    for (k = 0, len1 = enemies.length; k < len1; k++) {
+      enemy = enemies[k];
+      if (!enemy.isAlive) {
+        continue;
+      }
+      if (hitTo(player.x, player.y, player.img, enemy.x, enemy.y, enemy.img)) {
+        player.isAlive = false;
+        enemy.isAlive = false;
+      }
+      ref = player.bullets;
+      for (l = 0, len2 = ref.length; l < len2; l++) {
+        bullet = ref[l];
+        if (bullet.isDraw) {
+          if (hitTo(bullet.x, bullet.y, bullet.img, enemy.x, enemy.y, enemy.img)) {
+            bullet.isDraw = false;
+            enemy.isAlive = false;
+          }
         }
       }
     }
@@ -76,7 +88,7 @@ hitTo = function(x1, y1, img1, x2, y2, img2) {
 };
 
 window.onload = function() {
-  var SCREEN_HEIGHT, SCREEN_WIDTH;
+  var SCREEN_HEIGHT, SCREEN_WIDTH, i, j;
   SCREEN_WIDTH = 800;
   SCREEN_HEIGHT = 500;
   screenCanvas = $("canvas#screen")[0];
@@ -84,7 +96,10 @@ window.onload = function() {
   screenCanvas.height = SCREEN_HEIGHT;
   ctx = screenCanvas.getContext('2d');
   player = new Player(screenCanvas.width, screenCanvas.height);
-  enemy = new Enemy(screenCanvas.width, screenCanvas.height);
+  enemies = new Array(5);
+  for (i = j = 0; j <= 9; i = ++j) {
+    enemies[i] = new Enemy(screenCanvas.width, screenCanvas.height);
+  }
   return mainLoop();
 };
 
