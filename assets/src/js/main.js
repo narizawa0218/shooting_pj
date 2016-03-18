@@ -1,4 +1,4 @@
-var DOWN, FPS, KEY, LEFT, MSPF, RIGHT, SPACE, UP, ctx, enemy, mainLoop, player, screenCanvas;
+var DOWN, FPS, KEY, LEFT, MSPF, RIGHT, SPACE, UP, ctx, enemy, hitCheck, mainLoop, player, screenCanvas;
 
 screenCanvas = this;
 
@@ -31,13 +31,29 @@ KEY = {
 enemy = this;
 
 mainLoop = function() {
-  var deltaTime, interval, startTime;
+  var bullet, deltaTime, i, interval, len, ref, startTime;
   startTime = new Date();
   player.move();
   player.shot();
   player.reDraw();
   enemy.move();
   enemy.draw();
+  if (player.isAlive && enemy.isAlive) {
+    if (hitCheck(player.x, player.y, player.img, enemy.x, enemy.y, enemy.img)) {
+      player.isAlive = false;
+      enemy.isAlive = false;
+    }
+    ref = player.bullets;
+    for (i = 0, len = ref.length; i < len; i++) {
+      bullet = ref[i];
+      if (bullet.isAlive) {
+        if (hitCheck(bullet.x, bullet.y, bullet.img, enemy.x, enemy.y, enemy.img)) {
+          bullet.isAlive = false;
+          enemy.isAlive = false;
+        }
+      }
+    }
+  }
   deltaTime = (new Date()) - startTime;
   interval = MSPF - deltaTime;
   if (interval > 0) {
@@ -45,6 +61,18 @@ mainLoop = function() {
   } else {
     return mainLoop();
   }
+};
+
+hitCheck = function(x1, y1, img1, x2, y2, img2) {
+  var cx1, cx2, cy1, cy2, d, r1, r2;
+  cx1 = x1 + img1.width / 2;
+  cy1 = y1 + img1.height / 2;
+  cx2 = x2 + img2.width / 2;
+  cy2 = y2 + img2.height / 2;
+  r1 = (img1.width + img1.height) / 4;
+  r2 = (img2.width + img2.height) / 4;
+  d = Math.sqrt(Math.pow(cx1 - cx2, 2) + Math.pow(cy1 - cy2, 2));
+  return r1 + r2 > d;
 };
 
 window.onload = function() {

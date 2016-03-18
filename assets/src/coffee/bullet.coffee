@@ -20,7 +20,7 @@ class Bullet extends Actor
     @enabled()
 
   draw: ->
-    ctx.drawImage @img, @x, @y if @isDraw
+    ctx.drawImage @img, @x, @y if @isDraw && @isAlive
 
   enabled: ->
     @isDraw = true

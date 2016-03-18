@@ -4,7 +4,7 @@ class Enemy extends Actor
       "assets/img/enemy.png",
       0,
       0,
-      10,
+      5,
       canvasWidth,
       canvasHeight
     )
@@ -25,4 +25,4 @@ class Enemy extends Actor
     )
 
   draw: ->
-    ctx.drawImage @img, @x, @y
+    ctx.drawImage @img, @x, @y if @isAlive

@@ -6,7 +6,7 @@ Enemy = (function(superClass) {
   extend(Enemy, superClass);
 
   function Enemy(canvasWidth, canvasHeight) {
-    Enemy.__super__.constructor.call(this, "assets/img/enemy.png", 0, 0, 10, canvasWidth, canvasHeight);
+    Enemy.__super__.constructor.call(this, "assets/img/enemy.png", 0, 0, 5, canvasWidth, canvasHeight);
     this.initializePosition();
   }
 
@@ -22,7 +22,9 @@ Enemy = (function(superClass) {
   };
 
   Enemy.prototype.draw = function() {
-    return ctx.drawImage(this.img, this.x, this.y);
+    if (this.isAlive) {
+      return ctx.drawImage(this.img, this.x, this.y);
+    }
   };
 
   return Enemy;

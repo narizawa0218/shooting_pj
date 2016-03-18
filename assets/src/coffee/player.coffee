@@ -38,7 +38,7 @@ class Player extends Actor
     # キャンバスのクリア
     ctx.clearRect 0, 0, @canvasWidth, @canvasHeight
     # 描画
-    ctx.drawImage @img, @x, @y
+    ctx.drawImage @img, @x, @y if @isAlive
 
     for bullet in @bullets
       bullet.draw()

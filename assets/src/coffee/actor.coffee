@@ -2,6 +2,7 @@ class Actor
   constructor: (img_path, @x, @y, @speed, @canvasWidth, @canvasHeight) ->
     @img = new Image()
     @img.src = img_path
+    @isAlive = true
 
   up: ->
     @y -= @speed

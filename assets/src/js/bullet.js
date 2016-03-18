@@ -24,7 +24,7 @@ Bullet = (function(superClass) {
   };
 
   Bullet.prototype.draw = function() {
-    if (this.isDraw) {
+    if (this.isDraw && this.isAlive) {
       return ctx.drawImage(this.img, this.x, this.y);
     }
   };

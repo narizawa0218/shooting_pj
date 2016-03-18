@@ -33,6 +33,15 @@ mainLoop = ->
   enemy.move()
   enemy.draw()
 
+  if player.isAlive && enemy.isAlive
+    if hitCheck player.x, player.y, player.img, enemy.x, enemy.y, enemy.img
+      player.isAlive = false
+      enemy.isAlive = false
+    for bullet in player.bullets when bullet.isAlive
+      if hitCheck bullet.x, bullet.y, bullet.img, enemy.x, enemy.y, enemy.img
+        bullet.isAlive = false
+        enemy.isAlive = false
+
   deltaTime = (new Date()) - startTime
   interval = MSPF - deltaTime
 
@@ -40,6 +49,22 @@ mainLoop = ->
     setTimeout mainLoop, interval
   else
     mainLoop()
+
+hitCheck = (x1, y1, img1, x2, y2, img2) ->
+  # 中心座標の取得
+  cx1 = x1 + img1.width / 2
+  cy1 = y1 + img1.height / 2
+  cx2 = x2 + img2.width / 2
+  cy2 = y2 + img2.height / 2
+  # 半径の計算
+  r1 = (img1.width + img1.height) / 4
+  r2 = (img2.width + img2.height) / 4
+  # 中心座標同士の距離の測定
+  # Math.sqrt(d) -- dのルートを返す
+  # Math.pow(x, a) -- xのa乗を返す
+  d = Math.sqrt Math.pow(cx1 - cx2, 2) + Math.pow(cy1 - cy2, 2)
+  # 当たっているか判定
+  r1 + r2 > d
 
 window.onload = ->
   SCREEN_WIDTH = 800

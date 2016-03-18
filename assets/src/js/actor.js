@@ -9,6 +9,7 @@ Actor = (function() {
     this.canvasHeight = canvasHeight;
     this.img = new Image();
     this.img.src = img_path;
+    this.isAlive = true;
   }
 
   Actor.prototype.up = function() {

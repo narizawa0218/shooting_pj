@@ -60,7 +60,9 @@ Player = (function(superClass) {
   Player.prototype.reDraw = function() {
     var bullet, j, len, ref, results;
     ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-    ctx.drawImage(this.img, this.x, this.y);
+    if (this.isAlive) {
+      ctx.drawImage(this.img, this.x, this.y);
+    }
     ref = this.bullets;
     results = [];
     for (j = 0, len = ref.length; j < len; j++) {
