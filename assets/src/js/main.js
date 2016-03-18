@@ -1,4 +1,4 @@
-var DOWN, FPS, KEY, LEFT, MSPF, RIGHT, SPACE, UP, ctx, enemy, hitCheck, mainLoop, player, screenCanvas;
+var DOWN, FPS, KEY, LEFT, MSPF, RIGHT, SPACE, UP, ctx, enemy, hitTo, mainLoop, player, screenCanvas;
 
 screenCanvas = this;
 
@@ -39,7 +39,7 @@ mainLoop = function() {
   enemy.move();
   enemy.draw();
   if (player.isAlive && enemy.isAlive) {
-    if (hitCheck(player.x, player.y, player.img, enemy.x, enemy.y, enemy.img)) {
+    if (hitTo(player.x, player.y, player.img, enemy.x, enemy.y, enemy.img)) {
       player.isAlive = false;
       enemy.isAlive = false;
     }
@@ -47,7 +47,7 @@ mainLoop = function() {
     for (i = 0, len = ref.length; i < len; i++) {
       bullet = ref[i];
       if (bullet.isAlive) {
-        if (hitCheck(bullet.x, bullet.y, bullet.img, enemy.x, enemy.y, enemy.img)) {
+        if (hitTo(bullet.x, bullet.y, bullet.img, enemy.x, enemy.y, enemy.img)) {
           bullet.isAlive = false;
           enemy.isAlive = false;
         }
@@ -63,7 +63,7 @@ mainLoop = function() {
   }
 };
 
-hitCheck = function(x1, y1, img1, x2, y2, img2) {
+hitTo = function(x1, y1, img1, x2, y2, img2) {
   var cx1, cx2, cy1, cy2, d, r1, r2;
   cx1 = x1 + img1.width / 2;
   cy1 = y1 + img1.height / 2;

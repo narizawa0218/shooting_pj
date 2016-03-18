@@ -33,14 +33,6 @@ Actor = (function() {
     return this.y = y;
   };
 
-  Actor.prototype.xCenter = function() {
-    return (this.canvasWidth - this.img.width) / 2;
-  };
-
-  Actor.prototype.yCenter = function() {
-    return (this.canvasHeight - this.img.height) - 20;
-  };
-
   Actor.prototype.isOutsideOfCanvasHeight = function() {
     return this.y + this.img.height >= this.canvasHeight;
   };

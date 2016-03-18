@@ -11,7 +11,7 @@ class Player extends Actor
     @speed = 10
     @magazine_size = 5
     @bullets = new Array @magazine_size
-    @setPosition @xCenter(), @yCenter()
+    @setPosition @xCanvasCenter(), @yCanvasCenter()
     _setFireInterval.call @, 0
     _initializeBullets.call @
 
@@ -47,6 +47,12 @@ class Player extends Actor
     for bullet in @bullets
       bullet.setPosition(0, 0)
       bullet.disabled()
+
+  xCanvasCenter: ->
+    (@canvasWidth - @img.width) / 2
+
+  yCanvasCenter: ->
+    (@canvasHeight - @img.height) - 20
 
   _initializeBullets = ->
     for i in [0..@magazine_size]

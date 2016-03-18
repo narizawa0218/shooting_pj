@@ -14,7 +14,7 @@ Player = (function(superClass) {
     this.speed = 10;
     this.magazine_size = 5;
     this.bullets = new Array(this.magazine_size);
-    this.setPosition(this.xCenter(), this.yCenter());
+    this.setPosition(this.xCanvasCenter(), this.yCanvasCenter());
     _setFireInterval.call(this, 0);
     _initializeBullets.call(this);
   }
@@ -82,6 +82,14 @@ Player = (function(superClass) {
       results.push(bullet.disabled());
     }
     return results;
+  };
+
+  Player.prototype.xCanvasCenter = function() {
+    return (this.canvasWidth - this.img.width) / 2;
+  };
+
+  Player.prototype.yCanvasCenter = function() {
+    return (this.canvasHeight - this.img.height) - 20;
   };
 
   _initializeBullets = function() {

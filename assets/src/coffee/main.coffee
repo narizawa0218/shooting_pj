@@ -34,11 +34,11 @@ mainLoop = ->
   enemy.draw()
 
   if player.isAlive && enemy.isAlive
-    if hitCheck player.x, player.y, player.img, enemy.x, enemy.y, enemy.img
+    if hitTo player.x, player.y, player.img, enemy.x, enemy.y, enemy.img
       player.isAlive = false
       enemy.isAlive = false
     for bullet in player.bullets when bullet.isAlive
-      if hitCheck bullet.x, bullet.y, bullet.img, enemy.x, enemy.y, enemy.img
+      if hitTo bullet.x, bullet.y, bullet.img, enemy.x, enemy.y, enemy.img
         bullet.isAlive = false
         enemy.isAlive = false
 
@@ -50,7 +50,7 @@ mainLoop = ->
   else
     mainLoop()
 
-hitCheck = (x1, y1, img1, x2, y2, img2) ->
+hitTo = (x1, y1, img1, x2, y2, img2) ->
   # 中心座標の取得
   cx1 = x1 + img1.width / 2
   cy1 = y1 + img1.height / 2

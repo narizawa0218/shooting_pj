@@ -20,12 +20,6 @@ class Actor
     @x = x
     @y = y
 
-  xCenter: ->
-    (@canvasWidth - @img.width) / 2
-
-  yCenter: ->
-    (@canvasHeight - @img.height) - 20
-
   isOutsideOfCanvasHeight: ->
     @y + @img.height >= @canvasHeight
 
@@ -37,3 +31,4 @@ class Actor
 
   isInsideOfCanvasWidth: ->
     !@isOutsideOfCanvasWidth()
+    
