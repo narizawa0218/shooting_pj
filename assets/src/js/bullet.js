@@ -14,9 +14,8 @@ Bullet = (function(superClass) {
   Bullet.prototype.move = function() {
     this.up();
     if (this.y < this.img.height) {
-      this.isDraw = false;
+      return this.isDraw = false;
     }
-    return console.log(this.isDraw);
   };
 
   Bullet.prototype.initializePosition = function(x, y) {

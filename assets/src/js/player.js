@@ -35,19 +35,21 @@ Player = (function(superClass) {
   };
 
   Player.prototype.shot = function() {
-    var i, j, ref;
-    for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+    var bullet, j, len, ref;
+    ref = this.bullets;
+    for (j = 0, len = ref.length; j < len; j++) {
+      bullet = ref[j];
       if (KEY[SPACE] && this.fireInterval === 0) {
-        if (!this.bullets[i].initializePosition(this.x + this.img.width / 4, this.y - this.bullets[i].img.height)) {
+        if (!bullet.initializePosition(this.x + this.img.width / 4, this.y - bullet.img.height)) {
           _setFireInterval.call(this, 20);
           break;
         }
       }
-      if (!this.bullets[i].isDraw) {
+      if (!bullet.isDraw) {
         continue;
       }
-      this.bullets[i].move();
-      this.bullets[i].draw();
+      bullet.move();
+      bullet.draw();
     }
     if (this.fireInterval > 0) {
       return _coolDown.call(this);
@@ -55,22 +57,26 @@ Player = (function(superClass) {
   };
 
   Player.prototype.reDraw = function() {
-    var i, j, ref, results;
+    var bullet, j, len, ref, results;
     ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     ctx.drawImage(this.img, this.x, this.y);
+    ref = this.bullets;
     results = [];
-    for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
-      results.push(this.bullets[i].draw());
+    for (j = 0, len = ref.length; j < len; j++) {
+      bullet = ref[j];
+      results.push(bullet.draw());
     }
     return results;
   };
 
   Player.prototype.resetBullet = function() {
-    var i, j, ref, results;
+    var bullet, j, len, ref, results;
+    ref = this.bullets;
     results = [];
-    for (i = j = 0, ref = this.magazine_size; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
-      this.bullets[i].setPosition(0, 0);
-      results.push(this.bullets[i].disabled());
+    for (j = 0, len = ref.length; j < len; j++) {
+      bullet = ref[j];
+      bullet.setPosition(0, 0);
+      results.push(bullet.disabled());
     }
     return results;
   };

@@ -14,7 +14,6 @@ class Bullet extends Actor
   move: ->
     @up()
     @isDraw = false if @y < @img.height
-    console.log @isDraw
 
   initializePosition: (x, y) ->
     return true if @isDraw

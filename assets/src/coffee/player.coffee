@@ -23,14 +23,14 @@ class Player extends Actor
 
   # 各弾に対して処理する
   shot: ->
-    for i in [0..@magazine_size]
+    for bullet in @bullets
       if KEY[SPACE] && @fireInterval == 0
-        unless @bullets[i].initializePosition (@x + @img.width / 4), (@y - @bullets[i].img.height)
+        unless bullet.initializePosition (@x + @img.width / 4), (@y - bullet.img.height)
           _setFireInterval.call @, 20
           break
-      continue unless @bullets[i].isDraw
-      @bullets[i].move()
-      @bullets[i].draw()
+      continue unless bullet.isDraw
+      bullet.move()
+      bullet.draw()
     _coolDown.call @ if @fireInterval > 0
 
   reDraw: ->
@@ -39,13 +39,13 @@ class Player extends Actor
     # 描画
     ctx.drawImage @img, @x, @y
 
-    for i in [0..@magazine_size]
-      @bullets[i].draw()
+    for bullet in @bullets
+      bullet.draw()
 
   resetBullet: ->
-    for i in [0..@magazine_size]
-      @bullets[i].setPosition(0, 0)
-      @bullets[i].disabled()
+    for bullet in @bullets
+      bullet.setPosition(0, 0)
+      bullet.disabled()
 
   _initializeBullets = ->
     for i in [0..@magazine_size]
